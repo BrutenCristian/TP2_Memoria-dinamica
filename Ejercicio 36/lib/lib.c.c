@@ -41,7 +41,7 @@ void listado(void)
 {
     FILE *fp;
     struct lista *p=NULL, *u=NULL, *aux, *r;
-    int t,i=0,cmp;
+    int t,i=0;
     contactos_t reg;
     if((fp=fopen("contactos.dat","rb"))==0)
     {
@@ -64,49 +64,44 @@ void listado(void)
            if(p==NULL)
            {
                p=u=aux;
+               p->l=u;
                u->l=NULL;
                r=p;
            }
            else
            {
-               while(1)
+               if((strcmp(r->data.apellido,aux->data.apellido))==1)
                {
-                   if((strcmp(r->data.apellido,aux->data.apellido))==1)
+                   aux->l=p;
+                   p=aux;
+               }
+               else
+               {
+               while(r->l!=NULL)
+               {
+                   if((strcmp(r->l->data.apellido,aux->data.apellido))==-1)
                    {
-                       //tiene que ir primero
-                       aux->l=p;
-                       p=aux;
-                       break;
-                   }
-                   while(r->l)//si el lazo apunta a null termina el while
-                   {
-                       if((strcmp(r->l->data.apellido,aux->data.apellido))==-1)
-                       {
-                           r=r->l;
-                       }
-                       else break;
-                   }
-                   if(r==u)
-                   {
-                       //Es el ultimo
-                       u->l=aux;
-                       u=aux;
-                       u->l=NULL;
-                       break;
+                       r=r->l;
                    }
                    else
                    {
-                       //es uno central
                        aux->l=r->l;
                        r->l=aux;
-                       break;
                    }
+               }
+                   if(r==u)
+               {
+                   u->l=aux;
+                   u=aux;
+                   u->l=NULL;
+               }
                }
            }
         }
         fread(&reg,sizeof(contactos_t),1,fp);
         i++;
     }
+    r=p->l;
     archivo_directo(p,u);
     fclose(fp);
 
