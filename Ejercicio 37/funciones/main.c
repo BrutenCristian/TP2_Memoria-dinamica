@@ -120,19 +120,17 @@ datos_t busca_registro(long c)
 }
 char tip(unsigned char t)
 {
-    unsigned char aux;
-    aux=t^(1<<4);
-    if(aux>t)
-    {
-        printf("\nBit 4 del tipo en 0");
-        system("pause");
-        return 'N';
-    }
-    else
+    if(t&(1<<4))
     {
         printf("\nBit 4 del tipo en 1");
         system("pause");
         return 'S';
+    }
+    else
+    {
+        printf("\nBit 4 del tipo en 0");
+        system("pause");
+        return 'N';
     }
 }
 void impresion_pila(struct pila *p, struct pila *u)
