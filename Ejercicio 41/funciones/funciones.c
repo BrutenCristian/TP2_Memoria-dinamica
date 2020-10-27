@@ -33,37 +33,41 @@ struct lista * listado(struct lista *p, struct lista **u)
         if(p==NULL)
         {
             p=(*u)=aux;
-            p->l=(*u);
-            (*u)->l=NULL;
+            p->sig=(*u);
+            (*u)->sig=NULL;
+            (*u)->ant=p;
         }
         else
         {
             r=p;
             if((strcmp(aux->data.descripcion,p->data.descripcion))==1)//si es el primero
             {
-                aux->l=p;
+                aux->sig=p;
+                p->ant=aux;
                 p=aux;//actualizo primero
             }
             else
             {
-                while(r->l!=NULL)
+                while(r->sig!=NULL)
                 {
-                    if((strcmp(aux->data.descripcion,r->l->data.descripcion))==1)//si es el segundo
+                    if((strcmp(aux->data.descripcion,r->sig->data.descripcion))==1)//si es el segundo
                 {
-                    aux->l=r->l;
-                    r->l=aux;//lo inserto
+                    aux->sig=r->sig->sig;
+                    aux->ant=r;
+                    r->sig=aux;//lo inserto
                 }
                 else
                 {
-                    r=r->l;//si no es avanzo
+                    r=r->sig;//si no es avanzo
                 }
 
                 }
                 if(r==(*u))//si es el ultimo
                 {
-                    (*u)->l=aux;
+                    (*u)->sig=aux;
+                    aux->ant=(*u);
                     (*u)=aux;
-                    (*u)->l=NULL;
+                    (*u)->sig=NULL;
                 }
             }
         }
@@ -76,7 +80,7 @@ struct lista * listado(struct lista *p, struct lista **u)
             printf("\nDescripcion: %s",r->data.descripcion);
             printf("\nUbicacion: %s",r->data.ubicacion);
             printf("\n-----------------------------------");
-            r=r->l;
+            r=r->sig;
         }
         system("pause");
         system("cls");
@@ -121,10 +125,10 @@ void carga(struct lista *p, struct lista **u)
             aux.serialnumber=datos.serialnumber;
             aux.partnumber=datos.partnumber;
             strcpy(aux.descripcion,datos.descripcion);
-            strcpy(aux.ubicacion,datos.descripcion);
+            strcpy(aux.ubicacion,datos.ubicacion);
             fwrite(&aux,sizeof(repuestos_t),1,fp);
         }
-        r=r->l;
+        r=r->sig;
     }
     fclose(fp);
     return;

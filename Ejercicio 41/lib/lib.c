@@ -13,7 +13,7 @@ typedef struct
 struct lista
 {
     repuestos_t data;
-    struct lista *l;
+    struct lista *sig, *ant;
 };
 void crear(void);
 struct lista * listado(struct lista *p, struct lista **u);
